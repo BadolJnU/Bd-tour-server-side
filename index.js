@@ -26,7 +26,14 @@ const run = async () => {
             res.send(services);
             //console.log(services)
         });
-        // Construct a document                                                                                                                                                              
+        // get specific service details  
+        app.get('/services/:id', async(req, res) => {
+            const id = req.params.id;
+            const query = {_id:ObjectId(id)}
+            const service = await db.findOne(query);
+            res.send(service);
+        });
+        //post method on the server                                                                                                                                                           
         app.post('/services', async(req, res) => {
             const service = req.body;
             // Insert a single document, wait for promise so we can read it back
