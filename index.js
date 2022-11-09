@@ -19,16 +19,16 @@ const run = async () => {
         const db = client.db('BDtour').collection("services");;
 
         //get data from users
-        // app.get('/users', async(req, res) => {
-        //     const query = {};
-        //     const cursor = db.find(query);
-        //     const users = await cursor.toArray();
-        //     res.send(users);
-        // });
+        app.get('/services', async(req, res) => {
+            const query = {};
+            const cursor = db.find(query);
+            const services = await cursor.toArray();
+            res.send(services);
+            //console.log(services)
+        });
         // Construct a document                                                                                                                                                              
         app.post('/services', async(req, res) => {
             const service = req.body;
-            console.log(service);
             // Insert a single document, wait for promise so we can read it back
             const result = await db.insertOne(service);
             res.send(result);
