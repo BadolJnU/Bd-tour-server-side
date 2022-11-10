@@ -16,7 +16,8 @@ const run = async () => {
     try {
         await client.connect();
         console.log("Connected correctly to server");
-        const db = client.db('BDtour').collection("services");;
+        const db = client.db('BDtour').collection("services");
+        const db1 = client.db('BDtour').collection("Reviews");
 
         //get data from users
         app.get('/services', async(req, res) => {
@@ -33,11 +34,30 @@ const run = async () => {
             const service = await db.findOne(query);
             res.send(service);
         });
+        // get specific service reviews  
+        app.get('/reviews', async(req, res) => {
+            //console.log(req.query);
+            let query = {};
+            if(req.query.service_id){
+                query = {
+                    service_id: req.query.service_id
+                }
+            }
+            const cursor = db1.find(query);
+            const reviews = await cursor.toArray();
+            res.send(reviews);
+        });
         //post method on the server                                                                                                                                                           
         app.post('/services', async(req, res) => {
             const service = req.body;
             // Insert a single document, wait for promise so we can read it back
             const result = await db.insertOne(service);
+            res.send(result);
+        });
+        app.post('/reviews', async(req, res) => {
+            const service = req.body;
+            // Insert a single document, wait for promise so we can read it back
+            const result = await db1.insertOne(service);
             res.send(result);
         });
         // //update user
