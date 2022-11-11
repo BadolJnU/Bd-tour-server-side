@@ -72,13 +72,28 @@ const run = async () => {
             const result = await db1.insertOne(service);
             res.send(result);
         });
-        // //update user
-        // app.get('/users/:id', async(req, res) =>{
-        //     const id = req.params.id
-        //     const query = {_id: ObjectId(id)};
-        //     const user = await db.findOne(query);
-        //     res.send(user);
-        // }) 
+        //update user
+        app.get('/reviews/:id', async(req, res) =>{
+            const id = req.params.id
+            const query = {_id: ObjectId(id)};
+            const user = await db1.findOne(query);
+            res.send(user);
+        })
+        app.put('/reviews/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const user = req.body;
+            console.log("what come");
+            console.log(user.review);
+            const option = {upsert: true};
+            const updatedUser = {
+                $set: {
+                    review_text: user.review,
+                }
+            }
+            const result = await db1.updateOne(filter, updatedUser, option);
+            res.send(result);
+        })
 
         //delete review
         app.delete('/reviews/:id', async(req, res) => {
