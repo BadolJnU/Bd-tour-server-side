@@ -38,9 +38,21 @@ const run = async () => {
         app.get('/reviews', async(req, res) => {
             //console.log(req.query);
             let query = {};
-            if(req.query.service_id){
+            if(req.query.serviceId){
                 query = {
-                    service_id: req.query.service_id
+                    serviceId: req.query.serviceId
+                }
+            }
+            const cursor = db1.find(query);
+            const reviews = await cursor.toArray();
+            res.send(reviews);
+        });
+        app.get('/user_reviews', async(req, res) => {
+            console.log(req.query)
+            let query = {};
+            if(req.query.email){
+                query = {
+                    user_email: req.query.email
                 }
             }
             const cursor = db1.find(query);
@@ -68,14 +80,14 @@ const run = async () => {
         //     res.send(user);
         // }) 
 
-        //delete user
-        // app.delete('/users/:id', async(req, res) => {
-        //     const id = req.params.id;
-        //     const query = {_id: ObjectId(id)};
-        //     const result = await db.deleteOne(query);
-        //     console.log(result);
-        //     res.send(result);
-        // })
+        //delete review
+        app.delete('/reviews/:id', async(req, res) => {
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)};
+            const result = await db1.deleteOne(query);
+            console.log(result);
+            res.send(result);
+        })
     } catch (err) {
         console.log(err.stack);
     }
